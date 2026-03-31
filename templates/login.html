@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protegk IT | Candidate Portal</title>
+
+    <!-- Fonts + Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            background: linear-gradient(120deg, #0a2540, #1e4a76);
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .card-header h2 {
+            margin-top: 10px;
+        }
+
+        .form-container {
+            padding: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 25px;
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .submit-btn.loading {
+            background: gray;
+            pointer-events: none;
+        }
+
+        .form-footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
+            color: #666;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="glass-card">
+    <div class="card-header">
+        <i class="fas fa-shield-alt fa-2x"></i>
+        <h2>Protegk IT</h2>
+        <p>Candidate Portal</p>
+    </div>
+
+    <div class="form-container">
+
+        <!-- FORM -->
+        <form id="candidateForm" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <!-- Name -->
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="name" id="name" placeholder="Full Name" required>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input type="text" name="phone" id="phone" placeholder="Phone Number" required>
+            </div>
+
+            <!-- Anchor Button -->
+            <a href="#" id="submitBtn" class="submit-btn">
+                <i class="fas fa-arrow-right"></i> Continue
+            </a>
+
+        </form>
+
+        <div class="form-footer">
+             • Protegk IT Assessment
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("candidateForm");
+    const btn = document.getElementById("submitBtn");
+
+    btn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+
+        // Simple validation
+        if (!name || !email || !phone) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        if (phone.length < 10) {
+            alert("Enter valid phone number");
+            return;
+        }
+
+        // Loading state
+        btn.classList.add("loading");
+        btn.innerHTML = "Processing...";
+
+        // Submit form
+        setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
+</script>
+
+</body>
+</html>

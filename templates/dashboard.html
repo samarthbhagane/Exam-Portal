@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Protegk IT | Candidate Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* main card container - inspired by the exam container */
+        .dashboard-container {
+            width: 100%;
+            max-width: 750px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* header / brand area (matching protegk style) */
+        .brand-header {
+            background: linear-gradient(135deg, #0b2b4f 0%, #0f3b5e 100%);
+            padding: 1.6rem 2rem;
+            border-bottom: 3px solid #ffc107;
+        }
+
+        .brand-header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+        }
+
+        .brand-header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        /* main content area */
+        .content-panel {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        /* welcome section with candidate details */
+        .welcome-card {
+            background: #f8faff;
+            border-radius: 24px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #eef2f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1e2f4e;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #007bff;
+            padding-left: 1rem;
+            letter-spacing: -0.2px;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 180px;
+            background: white;
+            padding: 0.9rem 1.2rem;
+            border-radius: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e9edf2;
+            transition: 0.1s;
+        }
+
+        .info-item .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            color: #5b7a9a;
+            margin-bottom: 0.4rem;
+        }
+
+        .info-item .value {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #1f2f46;
+            word-break: break-word;
+        }
+
+        /* instruction / warm message (optional but adds style) */
+        .exam-notice {
+            background: #eef3fc;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-left: 4px solid #007bff;
+        }
+
+        .exam-notice span.emoji-badge {
+            font-size: 1.8rem;
+        }
+
+        .exam-notice p {
+            font-size: 0.9rem;
+            color: #1e4663;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* start test area */
+        .action-area {
+            text-align: center;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        /* button styling exactly matching the original exam style but refined */
+        .btn-start {
+            background: #007bff;
+            color: white;
+            padding: 14px 38px;
+            border: none;
+            border-radius: 48px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-start:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-start:active {
+            transform: translateY(1px);
+        }
+
+        /* subtle footer */
+        .footer-note {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #7c8ea0;
+            border-top: 1px solid #edf2f7;
+            padding-top: 1.5rem;
+        }
+
+        /* responsive touches */
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            .content-panel {
+                padding: 1.2rem;
+            }
+            .welcome-card h2 {
+                font-size: 1.5rem;
+            }
+            .info-item .value {
+                font-size: 1rem;
+            }
+            .btn-start {
+                padding: 12px 28px;
+                font-size: 1rem;
+            }
+        }
+
+        /* extra micro-interactions */
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        /* timer not needed in this page, but we keep consistent design language */
+        .dummy-badge {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="brand-header">
+        <h1> Protegk IT Solutions</h1>
+    </div>
+
+    <div class="content-panel">
+        <div class="welcome-card">
+            <h2>Welcome {{ candidate.name }}</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">📧 Email Address</div>
+                    <div class="value">{{ candidate.email }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">📞 Phone Number</div>
+                    <div class="value">{{ candidate.phone }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exam-notice">
+            <span class="emoji-badge">📋</span>
+            <p>✓ Total duration: 20 minutes &nbsp;|&nbsp; ✓ MCQ format &nbsp;|&nbsp; ✓ Single attempt only</p>
+        </div>
+
+        <div class="action-area">
+            <a href="{% url 'start_exam' %}" style="text-decoration: none;">
+                <button class="btn-start">
+                    🚀 Start Test
+                </button>
+            </a>
+            <p style="font-size: 0.8rem; margin-top: 18px; color: #5c6f87;">Once started, timer will begin. Ensure stable internet connection.</p>
+        </div>
+
+        <div class="footer-note">
+            <span>🔒 Protegk IT | All rights reserved • Assessment integrity protected</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

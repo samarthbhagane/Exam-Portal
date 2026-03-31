@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Protegk IT Online Exam | Candidate Assessment</title>
+    <style>
+        /* ========== BASE STYLES (preserving original exam template) ========== */
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 28px 32px;
+            margin-top: 20px;
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3a5f;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Timer - exactly as original but refined */
+        #timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            font-family: monospace;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .question {
+            padding: 18px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s;
+        }
+
+        .question:hover {
+            background: #f1f7ff;
+        }
+
+        label {
+            display: block;
+            margin-left: 20px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #1e2a3e;
+        }
+
+        label input {
+            margin-right: 12px;
+            transform: scale(1.02);
+            accent-color: #007bff;
+        }
+
+        /* removed input[type="text"], input[type="email"] rules – no longer needed */
+        /* but we keep button and submit-box styling as original */
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,123,255,0.3);
+        }
+
+        button:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0,123,255,0.25);
+        }
+
+        .submit-box {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        /* New styles for candidate info card (replaces input fields) */
+        .candidate-card {
+            background: #f0f6fe;
+            border-radius: 18px;
+            padding: 18px 24px;
+            margin: 20px 0 28px 0;
+            border-left: 5px solid #007bff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .candidate-detail {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .candidate-detail .label {
+            font-weight: 700;
+            color: #1e4663;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .candidate-detail .value {
+            font-weight: 600;
+            color: #0b2b4f;
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        /* additional responsive */
+        @media (max-width: 700px) {
+            .container {
+                width: 95%;
+                padding: 18px;
+            }
+            .candidate-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .candidate-detail {
+                justify-content: space-between;
+            }
+            #timer {
+                top: 12px;
+                right: 12px;
+                font-size: 1rem;
+                padding: 6px 14px;
+            }
+        }
+
+        /* small extra heading style */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0f3b5e;
+            margin: 1.2rem 0 0.8rem 0;
+            border-bottom: 2px solid #e2edf7;
+            padding-bottom: 8px;
+        }
+
+        .greeting-badge {
+            text-align: center;
+            background: #eef2fa;
+            display: inline-block;
+            width: auto;
+            margin-bottom: 10px;
+            border-radius: 50px;
+            padding: 5px 18px;
+            font-size: 0.85rem;
+            color: #0056b3;
+        }
+    </style>
+    <script src="/static/script.js" defer></script>
+</head>
+<body>
+<div id="timer">20:00</div>
+
+<div class="container">
+    <h2>⚡ Protegk IT Solution - Aptitude Test</h2>
+    <div style="text-align: center; margin-bottom: 5px;">
+        <span class="greeting-badge">📋 Online Assessment · Strict Timing</span>
+    </div>
+
+    <form method="POST" action="/submit/">
+        {% csrf_token %}
+        <h3>📌 Candidate Information</h3>
+        <div class="candidate-card">
+            <div class="candidate-detail">
+                <span class="label">👤 Full Name</span>
+                <span class="value">{{ candidate.name|default:"NA" }}</span>
+            </div>
+            <div class="candidate-detail">
+                <span class="label">📧 Email Address</span>
+                <span class="value">{{ candidate.email|default:"NA" }}</span>
+            </div>
+            <div class="candidate-detail">
+                <span class="label">📞 Phone</span>
+                <span class="value">{{ candidate.phone|default:"NA" }}</span>
+            </div>
+        </div>
+        <h3>📝 Multiple Choice Questions</h3>
+        {% for q in questions %}
+        <div class="question">
+            <p><b>Q{{ forloop.counter }}. {{ q.question_text }}</b></p>
+
+            <label><input type="radio" name="{{ q.id }}" value="A"> {{ q.option_a }}</label>
+            <label><input type="radio" name="{{ q.id }}" value="B"> {{ q.option_b }}</label>
+            <label><input type="radio" name="{{ q.id }}" value="C"> {{ q.option_c }}</label>
+            <label><input type="radio" name="{{ q.id }}" value="D"> {{ q.option_d }}</label>
+        </div>
+        {% empty %}
+        <div class="question">
+            <p><b>No questions loaded. Please contact administrator.</b></p>
+        </div>
+        {% endfor %}
+
+        <div class="submit-box">
+            <button type="submit">✅ Submit Test</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
