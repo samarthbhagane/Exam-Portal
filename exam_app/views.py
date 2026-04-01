@@ -4,27 +4,29 @@ from .models import Question, Candidate
 # 🔐 Custom Login
 def login_view(request):
     if request.method == "POST":
-        name = request.POST.get("name")
         email = request.POST.get("email")
-        phone = request.POST.get("phone")
+        password = request.POST.get("password")
 
-        candidate_obj, _ = Candidate.objects.update_or_create(
-            email=email,
-            defaults={
-                'name': name,
-                'phone': phone,
+        try:
+            candidate = Candidate.objects.get(email=email, password=password)
+
+            request.session['candidate'] = {
+                'id': candidate.id,
+                'name': candidate.name,
+                'email': candidate.email,
+                'phone': candidate.phone,
+                'is_admin': candidate.is_admin
             }
-        )
 
-        # Save in session
-        request.session['candidate'] = {
-            'id': candidate_obj.id,
-            'name': candidate_obj.name,
-            'email': candidate_obj.email,
-            'phone': candidate_obj.phone,
-        }
+            if candidate.is_admin:
+                return redirect('admin_dashboard')   
+            else:
+                return redirect('dashboard')
 
-        return redirect('dashboard')
+        except Candidate.DoesNotExist:
+            return render(request, 'login.html', {
+                "error": "Invalid email or password"
+            })
 
     return render(request, 'login.html')
 
@@ -96,3 +98,28 @@ def submit_exam(request):
         'score': score,
         'result': result
     })
+
+def signup_view(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        password = request.POST.get("password")
+
+        candidate_obj, created = Candidate.objects.get_or_create(
+            email=email,
+            defaults={
+                'name': name,
+                'phone': phone,
+                'password': password,
+            }
+        )
+
+        if not created:
+            return render(request, 'signup.html', {
+                'error': "Email already exists. Please login."
+            })
+
+        return redirect('login')
+
+    return render(request, 'signup.html')

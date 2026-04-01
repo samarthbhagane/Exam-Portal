@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protegk IT | Candidate Login</title>
+    <title>Protegk IT | Signup</title>
 
     <!-- Fonts + Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -31,32 +27,26 @@
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-            transition: 0.3s;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .card-header {
             background: linear-gradient(120deg, #0a2540, #1e4a76);
             color: white;
             text-align: center;
-            padding: 28px;
+            padding: 25px;
         }
 
         .card-header h2 {
             margin-top: 10px;
-            font-weight: 600;
         }
 
         .form-container {
-            padding: 28px;
+            padding: 25px;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             position: relative;
         }
 
@@ -65,27 +55,20 @@
             top: 50%;
             left: 15px;
             transform: translateY(-50%);
-            color: #94a3b8;
-            transition: 0.2s;
+            color: #888;
         }
 
         .input-group input {
             width: 100%;
-            padding: 13px 13px 13px 42px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
+            padding: 12px 12px 12px 40px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
             font-size: 14px;
-            transition: all 0.25s ease;
         }
 
         .input-group input:focus {
             border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
             outline: none;
-        }
-
-        .input-group input:focus + i {
-            color: #2563eb;
         }
 
         .submit-btn {
@@ -93,19 +76,13 @@
             width: 100%;
             text-align: center;
             padding: 14px;
-            border-radius: 30px;
+            border-radius: 25px;
             background: linear-gradient(90deg, #1e3a8a, #2563eb);
             color: white;
             font-weight: 600;
             text-decoration: none;
             margin-top: 10px;
             cursor: pointer;
-            transition: 0.25s;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(37,99,235,0.3);
         }
 
         .submit-btn.loading {
@@ -113,66 +90,18 @@
             pointer-events: none;
         }
 
-        /* Signup Button */
-        .signup-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 12px;
-            border-radius: 30px;
-            border: 2px solid #2563eb;
-            color: #2563eb;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            transition: 0.25s;
-        }
-
-        .signup-btn:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* Divider */
-        .divider {
-            text-align: center;
-            margin: 18px 0;
-            font-size: 12px;
-            color: #94a3b8;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #e5e7eb;
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
         .form-footer {
             text-align: center;
             font-size: 12px;
-            margin-top: 18px;
+            margin-top: 15px;
             color: #666;
         }
 
         .form-footer a {
             color: #2563eb;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
         }
-
     </style>
 </head>
 
@@ -180,65 +109,96 @@
 
 <div class="glass-card">
     <div class="card-header">
-        <i class="fas fa-shield-alt fa-2x"></i>
+        <i class="fas fa-user-plus fa-2x"></i>
         <h2>Protegk IT</h2>
-        <p>Candidate Login</p>
+        <p>Create your account</p>
     </div>
 
     <div class="form-container">
 
-        <form id="candidateForm" method="POST" action="{% url 'login' %}">
+        <form id="signupForm" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
 
+            <!-- Name -->
             <div class="input-group">
-                <input type="email" name="email" id="email" placeholder="Email" required>
+                <i class="fas fa-user"></i>
+                <input type="text" name="name" id="name" placeholder="Full Name" required>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
                 <i class="fas fa-envelope"></i>
+                <input type="email" name="email" id="email" placeholder="Email" required>
             </div>
 
+            <!-- Phone -->
             <div class="input-group">
-                <input type="password" name="password" id="password" placeholder="Password" required>
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-phone"></i>
+                <input type="text" name="phone" id="phone" placeholder="Phone Number" required>
             </div>
 
-            <!-- Login -->
+            <!-- Password -->
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+
+            <!-- Anchor Button -->
             <a href="#" id="submitBtn" class="submit-btn">
-                <i class="fas fa-arrow-right"></i> Login
-            </a>
-
-            <!-- Divider -->
-            <div class="divider">OR</div>
-
-            <!-- Signup -->
-            <a href="{% url 'signup' %}" class="signup-btn">
-                <i class="fas fa-user-plus"></i> Create Account
+                <i class="fas fa-user-check"></i> Create Account
             </a>
 
         </form>
 
         <div class="form-footer">
-            <a href="https://protegk.com" target="_blank">• Protegk IT</a>
+            Already have an account? 
+            <a href="{% url 'login' %}">Login</a>
         </div>
 
     </div>
 </div>
 
 <script>
-    const form = document.getElementById("candidateForm");
+    const form = document.getElementById("signupForm");
     const btn = document.getElementById("submitBtn");
 
     btn.addEventListener("click", function(e) {
         e.preventDefault();
 
+        const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
 
-        if (!email || !password) {
+        if (!name || !email || !phone || !password || !confirmPassword) {
             alert("Please fill all fields");
             return;
         }
 
+        if (phone.length < 10) {
+            alert("Enter valid phone number");
+            return;
+        }
+
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
         btn.classList.add("loading");
-        btn.innerHTML = "Logging in...";
+        btn.innerHTML = "Creating Account...";
 
         setTimeout(() => {
             form.submit();
