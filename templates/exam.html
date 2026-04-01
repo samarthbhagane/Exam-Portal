@@ -187,10 +187,9 @@
             color: #0056b3;
         }
     </style>
-    <script src="/static/script.js" defer></script>
 </head>
 <body>
-<div id="timer">20:00</div>
+<div id="timer" data-duration="300">05:00</div>
 
 <div class="container">
     <h2>⚡ Protegk IT Solution - Aptitude Test</h2>
@@ -198,7 +197,7 @@
         <span class="greeting-badge">📋 Online Assessment · Strict Timing</span>
     </div>
 
-    <form method="POST" action="/submit/">
+    <form method="POST" action="{% url 'submit' %}">
         {% csrf_token %}
         <h3>📌 Candidate Information</h3>
         <div class="candidate-card">
@@ -236,5 +235,75 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const timerElement = document.getElementById("timer");
+        const examForm = document.querySelector("form");
+
+        if (!timerElement || !examForm) {
+            return;
+        }
+
+        let time = Number(timerElement.getAttribute("data-duration") || 300);
+        let examSubmitted = false;
+        let timerInterval = null;
+
+        function renderTime() {
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            timerElement.innerText =
+                String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        }
+
+        function submitExam() {
+            if (examSubmitted) {
+                return;
+            }
+
+            examSubmitted = true;
+            window.onbeforeunload = null;
+            examForm.submit();
+        }
+
+        function startTimer() {
+            renderTime();
+
+            timerInterval = setInterval(function () {
+                time -= 1;
+
+                if (time <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.innerText = "00:00";
+                    alert("Time is up. Your test will be submitted automatically.");
+                    submitExam();
+                    return;
+                }
+
+                renderTime();
+            }, 1000);
+        }
+
+        examForm.addEventListener("submit", function () {
+            examSubmitted = true;
+            window.onbeforeunload = null;
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+        });
+
+        window.onbeforeunload = function () {
+            if (!examSubmitted) {
+                return "Exam is in progress!";
+            }
+        };
+
+        renderTime();
+        setTimeout(function () {
+            alert("You have 5 minutes to complete the test. Click OK to start.");
+            startTimer();
+        }, 100);
+    });
+</script>
 </body>
 </html>

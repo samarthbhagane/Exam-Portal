@@ -12,9 +12,9 @@ class Question(models.Model):
 class Candidate(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15) 
-    mcq_score = models.IntegerField()
-    result = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    mcq_score = models.IntegerField(default=0)
+    result = models.CharField(max_length=100, default="Pending")
 
     created_at = models.DateTimeField(auto_now_add=True)  # optional but useful
 

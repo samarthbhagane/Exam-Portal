@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Question
+from .models import Question, Candidate
 
 # 🔐 Custom Login
 def login_view(request):
@@ -8,11 +8,20 @@ def login_view(request):
         email = request.POST.get("email")
         phone = request.POST.get("phone")
 
+        candidate_obj, _ = Candidate.objects.update_or_create(
+            email=email,
+            defaults={
+                'name': name,
+                'phone': phone,
+            }
+        )
+
         # Save in session
         request.session['candidate'] = {
-            'name': name,
-            'email': email,
-            'phone': phone
+            'id': candidate_obj.id,
+            'name': candidate_obj.name,
+            'email': candidate_obj.email,
+            'phone': candidate_obj.phone,
         }
 
         return redirect('dashboard')
@@ -45,7 +54,10 @@ def exam_view(request):
         return redirect('dashboard')
 
     questions = Question.objects.all()
-    return render(request, 'exam.html', {'questions': questions})
+    return render(request, 'exam.html', {
+        'questions': questions,
+        'candidate': request.session.get('candidate')
+    })
 
 
 # Submit
@@ -71,8 +83,16 @@ def submit_exam(request):
     else:
         result = "Not Suitable"
 
+    candidate_data = request.session.get('candidate')
+    Candidate.objects.filter(email=candidate_data.get('email')).update(
+        name=candidate_data.get('name'),
+        phone=candidate_data.get('phone'),
+        mcq_score=score,
+        result=result,
+    )
+
     return render(request, 'result.html', {
-        'candidate': request.session.get('candidate'),
+        'candidate': candidate_data,
         'score': score,
         'result': result
     })
