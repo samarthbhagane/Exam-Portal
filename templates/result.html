@@ -1,5 +1,69 @@
 {% extends "base.html" %}
 {% block title %}Protegk IT | Candidate Results{% endblock %}
+{% block extra_head %}
+<style>
+    .search-panel {
+        margin-bottom: 24px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(15, 76, 92, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 8px 22px rgba(14, 45, 75, 0.08);
+    }
+    .search-panel .field label {
+        display: block;
+        font-size: 0.82rem;
+        color: #5c7285;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .search-panel .input-wrap {
+        position: relative;
+    }
+    .search-panel .input-wrap i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #5c7285;
+        font-size: 0.92rem;
+    }
+    .search-panel input,
+    .search-panel select {
+        width: 100%;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid rgba(15, 76, 92, 0.2);
+        border-radius: 10px;
+        background: #fff;
+        color: #1f3a54;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+    .search-panel select {
+        background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l6 6 6-6" fill="none" stroke="%235c7285" stroke-width="2" stroke-linecap="round"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 14px 8px;
+        padding-right: 38px;
+    }
+    .search-panel .btn-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 18px;
+    }
+    .search-panel .btn-ghost {
+        background: rgba(255,255,255,0.85);
+        border: 1px solid rgba(15,76,92,0.18);
+        color: #0f4c5c;
+    }
+    @media (max-width: 920px) {
+        .search-panel .grid.two { grid-template-columns: 1fr !important; }
+        .search-panel .btn-group { flex-direction: column; align-items: stretch; }
+    }
+</style>
+{% endblock %}
 {% block content %}
 <div class="page-shell">
     <div class="brand-bar">
@@ -7,7 +71,6 @@
             <div class="brand-icon"><i class="fas fa-chart-column"></i></div>
             <div>
                 <div>Candidate Result Records</div>
-                <div class="brand-note">Central view of submitted candidate details, scores, and outcomes</div>
             </div>
         </div>
         <a href="{% url 'login' %}" class="btn btn-ghost">
@@ -19,9 +82,42 @@
         <div class="hero-head">
             <p class="hero-eyebrow">Results Overview</p>
             <h1 class="hero-title">Assessment Performance</h1>
-            <p class="hero-copy">Review all stored candidate records in one place with a clean, readable, professional table layout.</p>
         </div>
         <div class="panel-body">
+            <!-- Search Form -->
+            <form method="GET" class="search-panel">
+                <div class="grid two" style="gap: 16px;">
+                    <div class="field">
+                        <label for="search_query">Search Candidates</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-search"></i>
+                            <input type="text" name="q" id="search_query" placeholder="Search by name, email, or phone number" value="{{ request.GET.q }}">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="search_result">Filter by Result</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-filter"></i>
+                            <select name="result" id="search_result">
+                                <option value="">    All Results</option>
+                                <option value="Excellent" {% if request.GET.result == 'Excellent' %}selected{% endif %}>Excellent</option>
+                                <option value="Good" {% if request.GET.result == 'Good' %}selected{% endif %}>Good</option>
+                                <option value="Average" {% if request.GET.result == 'Average' %}selected{% endif %}>Average</option>
+                                <option value="Not Suitable" {% if request.GET.result == 'Not Suitable' %}selected{% endif %}>Not Suitable</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    <a href="{% url 'results' %}" class="btn btn-ghost">
+                        <i class="fas fa-times"></i> Clear
+                    </a>
+                </div>
+            </form>
+
             {% if results %}
             <div class="table-wrap">
                 <table>

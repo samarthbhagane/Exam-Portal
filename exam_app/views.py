@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q 
 from .models import Question, Candidate
 
 # 🔐 Custom Login
@@ -142,7 +143,28 @@ def result_view(request):
     if not request.session['candidate'].get('is_admin'):
         return redirect('dashboard')
 
-    results = Candidate.objects.all().order_by('-created_at')
+    # Get search parameters
+    search_query = request.GET.get('q', '').strip()
+    result_filter = request.GET.get('result', '').strip()
+
+    # Start with base queryset
+    results = Candidate.objects.filter(is_admin=False)
+
+    # Apply search query across multiple fields
+    if search_query:
+        results = results.filter(
+            Q(name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone__icontains=search_query)
+        )
+
+    # Apply result filter
+    if result_filter:
+        results = results.filter(result=result_filter)
+
+    results = results.order_by('-created_at')
+
     return render(request, 'result.html', {
-        'results': results
+        'results': results,
+        'request': request  # Pass request to template for form values
     })
