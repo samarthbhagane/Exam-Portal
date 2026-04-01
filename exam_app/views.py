@@ -19,9 +19,8 @@ def login_view(request):
             }
 
             if candidate.is_admin:
-                return redirect('admin_dashboard')   
-            else:
-                return redirect('dashboard')
+                return redirect('results')
+            return redirect('dashboard')
 
         except Candidate.DoesNotExist:
             return render(request, 'login.html', {
@@ -35,6 +34,8 @@ def login_view(request):
 def dashboard(request):
     if not request.session.get('candidate'):
         return redirect('login')
+    if request.session['candidate'].get('is_admin'):
+        return redirect('results')
 
     return render(request, 'dashboard.html', {
         'candidate': request.session.get('candidate')
@@ -45,6 +46,8 @@ def dashboard(request):
 def start_exam(request):
     if not request.session.get('candidate'):
         return redirect('login')
+    if request.session['candidate'].get('is_admin'):
+        return redirect('results')
 
     request.session['exam_started'] = True
     return redirect('exam')
@@ -54,6 +57,8 @@ def start_exam(request):
 def exam_view(request):
     if not request.session.get('exam_started'):
         return redirect('dashboard')
+    if request.session.get('candidate', {}).get('is_admin'):
+        return redirect('results')
 
     questions = Question.objects.all()
     return render(request, 'exam.html', {
@@ -66,6 +71,10 @@ def exam_view(request):
 def submit_exam(request):
     if not request.session.get('candidate'):
         return redirect('login')
+    if request.session['candidate'].get('is_admin'):
+        return redirect('results')
+    if request.method != "POST":
+        return redirect('exam')
 
     request.session['exam_started'] = False
 
@@ -86,7 +95,7 @@ def submit_exam(request):
         result = "Not Suitable"
 
     candidate_data = request.session.get('candidate')
-    candidate = Candidate.objects.update_or_create(
+    candidate, _ = Candidate.objects.update_or_create(
         email=candidate_data.get('email'),
         defaults={
             'name': candidate_data.get('name'),
@@ -128,6 +137,11 @@ def signup_view(request):
     return render(request, 'signup.html')
 
 def result_view(request):
+    if not request.session.get('candidate'):
+        return redirect('login')
+    if not request.session['candidate'].get('is_admin'):
+        return redirect('dashboard')
+
     results = Candidate.objects.all().order_by('-created_at')
     return render(request, 'result.html', {
         'results': results

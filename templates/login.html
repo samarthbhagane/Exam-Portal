@@ -1,250 +1,257 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protegk IT | Candidate Login</title>
+{% extends "base.html" %}
+{% block title %}Protegk IT | Login{% endblock %}
+{% block extra_head %}
+<style>
+    .login-scene {
+        min-height: 100vh;
+        position: relative;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: 16px;
+    }
 
-    <!-- Fonts + Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    .login-scene::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(15, 76, 92, 0.26), transparent 28%),
+            radial-gradient(circle at 82% 18%, rgba(193, 122, 44, 0.22), transparent 24%),
+            radial-gradient(circle at 50% 85%, rgba(11, 52, 64, 0.16), transparent 30%),
+            linear-gradient(135deg, #e9e2d6 0%, #dce8eb 45%, #eef3f5 100%);
+        z-index: 0;
+    }
 
-    <style>
-        * {
-            margin: 0;
+    .login-scene::after {
+        content: "";
+        position: absolute;
+        width: 980px;
+        height: 980px;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -48%);
+        background:
+            radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.12) 34%, rgba(255,255,255,0) 66%);
+        filter: blur(8px);
+        z-index: 0;
+    }
+
+    .login-grid {
+        width: min(1120px, calc(100% - 32px));
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(420px, 460px);
+        align-items: center;
+        gap: 28px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-copy {
+        padding: 8px 8px;
+    }
+
+    .login-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.55);
+        color: #0f4c5c;
+        border: 1px solid rgba(15, 76, 92, 0.1);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .login-copy h2 {
+        margin: 0 0 12px;
+        font-size: clamp(2.1rem, 4vw, 3.9rem);
+        line-height: 0.94;
+        letter-spacing: -0.06em;
+        color: #102a43;
+        max-width: 560px;
+    }
+
+    .login-copy p {
+        margin: 0;
+        max-width: 520px;
+        color: #486581;
+        font-size: 0.98rem;
+        line-height: 1.65;
+    }
+
+    .login-copy-inner {
+        max-width: 540px;
+    }
+
+    .login-points {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .login-point {
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid rgba(15, 76, 92, 0.08);
+        border-radius: 18px;
+        box-shadow: 0 14px 32px rgba(16, 42, 67, 0.06);
+    }
+
+    .login-point strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #102a43;
+        font-size: 0.95rem;
+    }
+
+    .login-point span {
+        color: #5c7285;
+        font-size: 0.84rem;
+        line-height: 1.45;
+    }
+
+    .login-card-wrap {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .login-card-wrap .auth-card {
+        width: 100%;
+        max-width: 460px;
+    }
+
+    .login-card-wrap .auth-top {
+        padding: 22px 24px 18px;
+    }
+
+    .login-card-wrap .auth-top h1 {
+        font-size: 1.8rem;
+        margin-top: 8px;
+    }
+
+    .login-card-wrap .auth-top p {
+        font-size: 0.94rem;
+        line-height: 1.5;
+    }
+
+    .login-card-wrap .auth-body {
+        padding: 20px 24px 22px;
+    }
+
+    .login-card-wrap .field {
+        margin-bottom: 12px;
+    }
+
+    .login-card-wrap .input-wrap input {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    @media (max-width: 920px) {
+        .login-grid {
+            grid-template-columns: 1fr;
+            gap: 22px;
+        }
+
+        .login-copy {
             padding: 0;
-            box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .login-copy-inner {
+            max-width: none;
         }
 
-        .glass-card {
-            width: 100%;
-            max-width: 420px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-            transition: 0.3s;
+        .login-points {
+            grid-template-columns: 1fr;
         }
-
-        .glass-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .card-header {
-            background: linear-gradient(120deg, #0a2540, #1e4a76);
-            color: white;
-            text-align: center;
-            padding: 28px;
-        }
-
-        .card-header h2 {
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        .form-container {
-            padding: 28px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .input-group i {
-            position: absolute;
-            top: 50%;
-            left: 15px;
-            transform: translateY(-50%);
-            color: #94a3b8;
-            transition: 0.2s;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 13px 13px 13px 42px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-            transition: all 0.25s ease;
-        }
-
-        .input-group input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
-            outline: none;
-        }
-
-        .input-group input:focus + i {
-            color: #2563eb;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 14px;
-            border-radius: 30px;
-            background: linear-gradient(90deg, #1e3a8a, #2563eb);
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(37,99,235,0.3);
-        }
-
-        .submit-btn.loading {
-            background: gray;
-            pointer-events: none;
-        }
-
-        /* Signup Button */
-        .signup-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 12px;
-            border-radius: 30px;
-            border: 2px solid #2563eb;
-            color: #2563eb;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            transition: 0.25s;
-        }
-
-        .signup-btn:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* Divider */
-        .divider {
-            text-align: center;
-            margin: 18px 0;
-            font-size: 12px;
-            color: #94a3b8;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #e5e7eb;
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        .form-footer {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 18px;
-            color: #666;
-        }
-
-        .form-footer a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-    </style>
-</head>
-
-<body>
-
-<div class="glass-card">
-    <div class="card-header">
-        <i class="fas fa-shield-alt fa-2x"></i>
-        <h2>Protegk IT</h2>
-        <p>Candidate Login</p>
-    </div>
-
-    <div class="form-container">
-
-        <form id="candidateForm" method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-
-            <div class="input-group">
-                <input type="email" name="email" id="email" placeholder="Email" required>
-                <i class="fas fa-envelope"></i>
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="login-scene">
+    <div class="login-grid">
+        <div class="login-copy">
+            <div class="login-copy-inner">
+                <div class="login-kicker"><i class="fas fa-shield-halved"></i> Protegk IT Solutions</div>
+                <h2>Modern hiring starts with a focused assessment experience.</h2>
+                <p>Access the assessment platform with your account credentials. Candidates can take the test, while admin users are directed to the results view after login.</p>
+                <div class="login-points">
+                    <div class="login-point">
+                        <strong>Structured Flow</strong>
+                        <span>Simple login, guided dashboard, timed assessment, and clean submission.</span>
+                    </div>
+                    <div class="login-point">
+                        <strong>Professional Review</strong>
+                        <span>Assessment outcomes are stored and presented in a readable results interface.</span>
+                    </div>
+                    <div class="login-point">
+                        <strong>Unified Access</strong>
+                        <span>One secure entry point for both candidates and internal reviewers.</span>
+                    </div>
+                </div>
             </div>
-
-            <div class="input-group">
-                <input type="password" name="password" id="password" placeholder="Password" required>
-                <i class="fas fa-lock"></i>
-            </div>
-
-            <!-- Login -->
-            <a href="#" id="submitBtn" class="submit-btn">
-                <i class="fas fa-arrow-right"></i> Login
-            </a>
-
-            <!-- Divider -->
-            <div class="divider">OR</div>
-
-            <!-- Signup -->
-            <a href="{% url 'signup' %}" class="signup-btn">
-                <i class="fas fa-user-plus"></i> Create Account
-            </a>
-
-        </form>
-
-        <div class="form-footer">
-            <a href="https://protegk.com" target="_blank">• Protegk IT</a>
         </div>
 
+        <div class="login-card-wrap">
+            <div class="panel auth-card">
+                <div class="auth-top">
+                    <div class="badge"><i class="fas fa-shield-halved"></i> Protegk IT Assessment Portal</div>
+                    <h1>Sign in to continue</h1>
+                    <p>Use your account credentials to access the assessment platform.</p>
+                </div>
+                <div class="auth-body">
+                    {% if error %}
+                    <div class="alert alert-error">{{ error }}</div>
+                    {% endif %}
+
+                    <form id="candidateForm" method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label for="email">Email Address</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+                            <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        New candidate? <a href="{% url 'signup' %}">Create an account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
+{% endblock %}
+{% block extra_script %}
 <script>
-    const form = document.getElementById("candidateForm");
-    const btn = document.getElementById("submitBtn");
+    const loginForm = document.getElementById("candidateForm");
+    const loginBtn = document.getElementById("submitBtn");
 
-    btn.addEventListener("click", function(e) {
-        e.preventDefault();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        if (!email || !password) {
-            alert("Please fill all fields");
-            return;
-        }
-
-        btn.classList.add("loading");
-        btn.innerHTML = "Logging in...";
-
-        setTimeout(() => {
-            form.submit();
-        }, 500);
+    loginForm.addEventListener("submit", function () {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In';
     });
 </script>
-
-</body>
-</html>
+{% endblock %}

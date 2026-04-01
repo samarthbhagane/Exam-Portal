@@ -1,90 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            margin: 0;
-            padding: 30px 15px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        h2 {
-            margin-top: 0;
-            color: #1e3a8a;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #dbe2ea;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background: #1e3a8a;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background: #f8fafc;
-        }
-
-        .empty {
-            margin-top: 20px;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Candidate Result Records</h2>
-
-        {% if results %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Score</th>
-                    <th>Result</th>
-                    <th>Submitted At</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in results %}
-                <tr>
-                    <td>{{ data.name }}</td>
-                    <td>{{ data.email }}</td>
-                    <td>{{ data.phone }}</td>
-                    <td>{{ data.mcq_score }}</td>
-                    <td>{{ data.result }}</td>
-                    <td>{{ data.created_at }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="empty">No results found.</p>
-        {% endif %}
+{% extends "base.html" %}
+{% block title %}Protegk IT | Candidate Results{% endblock %}
+{% block content %}
+<div class="page-shell">
+    <div class="brand-bar">
+        <div class="brand-mark">
+            <div class="brand-icon"><i class="fas fa-chart-column"></i></div>
+            <div>
+                <div>Candidate Result Records</div>
+                <div class="brand-note">Central view of submitted candidate details, scores, and outcomes</div>
+            </div>
+        </div>
+        <a href="{% url 'login' %}" class="btn btn-ghost">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </a>
     </div>
-</body>
-</html>
+
+    <div class="panel">
+        <div class="hero-head">
+            <p class="hero-eyebrow">Results Overview</p>
+            <h1 class="hero-title">Assessment Performance</h1>
+            <p class="hero-copy">Review all stored candidate records in one place with a clean, readable, professional table layout.</p>
+        </div>
+        <div class="panel-body">
+            {% if results %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Score</th>
+                            <th>Result</th>
+                            <th>Submitted At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in results %}
+                        
+                        <tr>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.email }}</td>
+                            <td>{{ data.phone }}</td>
+                            <td>{{ data.mcq_score }}</td>
+                            <td>
+                                <span class="result-pill {% if data.result == 'Excellent' %}result-excellent{% elif data.result == 'Good' %}result-good{% elif data.result == 'Average' %}result-average{% elif data.result == 'Not Suitable' %}result-low{% else %}result-pending{% endif %}">
+                                    {{ data.result }}
+                                </span>
+                            </td>
+                            <td>{{ data.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="status-card center">
+                <h2 style="margin-top: 0;">No Results Found</h2>
+                <p class="section-copy">Candidate submissions will appear here once the first assessment is completed.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

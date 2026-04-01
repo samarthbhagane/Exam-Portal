@@ -1,176 +1,287 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protegk IT | Signup</title>
+{% extends "base.html" %}
+{% block title %}Protegk IT | Create Account{% endblock %}
+{% block extra_head %}
+<style>
+    .signup-scene {
+        min-height: 100vh;
+        position: relative;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: 16px;
+    }
 
-    <!-- Fonts + Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    .signup-scene::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 18% 18%, rgba(193, 122, 44, 0.24), transparent 28%),
+            radial-gradient(circle at 82% 16%, rgba(15, 76, 92, 0.22), transparent 26%),
+            radial-gradient(circle at 50% 86%, rgba(44, 110, 96, 0.14), transparent 30%),
+            linear-gradient(135deg, #efe6d8 0%, #dbe8eb 48%, #f1f5f6 100%);
+        z-index: 0;
+    }
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    .signup-scene::after {
+        content: "";
+        position: absolute;
+        width: 1020px;
+        height: 1020px;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -48%);
+        background: radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 36%, rgba(255,255,255,0) 68%);
+        filter: blur(8px);
+        z-index: 0;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .signup-grid {
+        width: min(1160px, calc(100% - 32px));
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(420px, 460px);
+        align-items: center;
+        gap: 28px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .signup-copy {
+        padding: 8px 8px;
+    }
+
+    .signup-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.58);
+        color: #8e5b19;
+        border: 1px solid rgba(193, 122, 44, 0.14);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .signup-copy h2 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 4vw, 3.8rem);
+        line-height: 0.94;
+        letter-spacing: -0.06em;
+        color: #102a43;
+        max-width: 540px;
+    }
+
+    .signup-copy p {
+        margin: 0;
+        max-width: 510px;
+        color: #486581;
+        font-size: 0.98rem;
+        line-height: 1.65;
+    }
+
+    .signup-copy-inner {
+        max-width: 540px;
+    }
+
+    .signup-points {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .signup-point {
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(193, 122, 44, 0.1);
+        border-radius: 18px;
+        box-shadow: 0 14px 32px rgba(16, 42, 67, 0.06);
+    }
+
+    .signup-point strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #102a43;
+        font-size: 0.95rem;
+    }
+
+    .signup-point span {
+        color: #5c7285;
+        font-size: 0.84rem;
+        line-height: 1.45;
+    }
+
+    .signup-card-wrap {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .signup-card-wrap .auth-card {
+        width: 100%;
+        max-width: 460px;
+    }
+
+    .signup-card-wrap .auth-top {
+        padding: 20px 24px 16px;
+    }
+
+    .signup-card-wrap .auth-top h1 {
+        font-size: 1.72rem;
+        margin-top: 8px;
+    }
+
+    .signup-card-wrap .auth-top p {
+        font-size: 0.92rem;
+        line-height: 1.45;
+    }
+
+    .signup-card-wrap .auth-body {
+        padding: 18px 24px 20px;
+    }
+
+    .signup-card-wrap .field {
+        margin-bottom: 10px;
+    }
+
+    .signup-card-wrap .field label {
+        font-size: 0.88rem;
+    }
+
+    .signup-card-wrap .input-wrap input {
+        padding-top: 11px;
+        padding-bottom: 11px;
+    }
+
+    .signup-card-wrap .auth-footer {
+        margin-top: 12px;
+        font-size: 0.88rem;
+    }
+
+    @media (max-width: 920px) {
+        .signup-grid {
+            grid-template-columns: 1fr;
+            gap: 22px;
         }
 
-        .glass-card {
-            width: 100%;
-            max-width: 420px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        .signup-copy {
+            padding: 0;
         }
 
-        .card-header {
-            background: linear-gradient(120deg, #0a2540, #1e4a76);
-            color: white;
-            text-align: center;
-            padding: 25px;
+        .signup-copy-inner {
+            max-width: none;
         }
 
-        .card-header h2 {
-            margin-top: 10px;
+        .signup-points {
+            grid-template-columns: 1fr;
         }
-
-        .form-container {
-            padding: 25px;
-        }
-
-        .input-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        .input-group i {
-            position: absolute;
-            top: 50%;
-            left: 15px;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 12px 12px 40px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .input-group input:focus {
-            border-color: #2563eb;
-            outline: none;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 14px;
-            border-radius: 25px;
-            background: linear-gradient(90deg, #1e3a8a, #2563eb);
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .submit-btn.loading {
-            background: gray;
-            pointer-events: none;
-        }
-
-        .form-footer {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
-            color: #666;
-        }
-
-        .form-footer a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="glass-card">
-    <div class="card-header">
-        <i class="fas fa-user-plus fa-2x"></i>
-        <h2>Protegk IT</h2>
-        <p>Create your account</p>
-    </div>
-
-    <div class="form-container">
-
-        <form id="signupForm" method="POST" action="{% url 'signup' %}">
-            {% csrf_token %}
-
-            <!-- Name -->
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" name="name" id="name" placeholder="Full Name" required>
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="signup-scene">
+    <div class="signup-grid">
+        <div class="signup-copy">
+            <div class="signup-copy-inner">
+                <div class="signup-kicker"><i class="fas fa-user-plus"></i> Candidate Onboarding</div>
+                <h2>Create your profile and get assessment-ready.</h2>
+                <p>Register once to enter the assessment process with a professional, guided experience built for candidates and internal reviewers.</p>
+                <div class="signup-points">
+                    <div class="signup-point">
+                        <strong>Quick Setup</strong>
+                        <span>Create your account in a few steps and keep your candidate details organized.</span>
+                    </div>
+                    <div class="signup-point">
+                        <strong>Clean Journey</strong>
+                        <span>Move from registration to dashboard, exam, and submission in one consistent flow.</span>
+                    </div>
+                    <div class="signup-point">
+                        <strong>Recorded Outcomes</strong>
+                        <span>Your score and result are saved and available for internal review after completion.</span>
+                    </div>
+                </div>
             </div>
-
-            <!-- Email -->
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" name="email" id="email" placeholder="Email" required>
-            </div>
-
-            <!-- Phone -->
-            <div class="input-group">
-                <i class="fas fa-phone"></i>
-                <input type="text" name="phone" id="phone" placeholder="Phone Number" required>
-            </div>
-
-            <!-- Password -->
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" name="password" id="password" placeholder="Password" required>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-            </div>
-
-            <!-- Anchor Button -->
-            <a href="#" id="submitBtn" class="submit-btn">
-                <i class="fas fa-user-check"></i> Create Account
-            </a>
-
-        </form>
-
-        <div class="form-footer">
-            Already have an account? 
-            <a href="{% url 'login' %}">Login</a>
         </div>
 
+        <div class="signup-card-wrap">
+            <div class="panel auth-card">
+                <div class="auth-top">
+                    <div class="badge"><i class="fas fa-user-plus"></i> Candidate Registration</div>
+                    <h1>Create your account</h1>
+                    <p>Register once to access the assessment portal with a consistent, secure candidate profile.</p>
+                </div>
+                <div class="auth-body">
+                    {% if error %}
+                    <div class="alert alert-error">{{ error }}</div>
+                    {% endif %}
+
+                    <form id="signupForm" method="POST" action="{% url 'signup' %}">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label for="name">Full Name</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name="name" id="name" placeholder="Enter your full name" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">Email Address</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-phone"></i>
+                                <input type="text" name="phone" id="phone" placeholder="Enter your phone number" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="password" id="password" placeholder="Create a password" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-shield-heart"></i>
+                                <input type="password" id="confirmPassword" placeholder="Repeat your password" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-secondary btn-block">
+                            <i class="fas fa-user-check"></i> Create Account
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        Already have an account? <a href="{% url 'login' %}">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
+{% endblock %}
+{% block extra_script %}
 <script>
-    const form = document.getElementById("signupForm");
-    const btn = document.getElementById("submitBtn");
+    const signupForm = document.getElementById("signupForm");
+    const signupBtn = document.getElementById("submitBtn");
 
-    btn.addEventListener("click", function(e) {
-        e.preventDefault();
-
+    signupForm.addEventListener("submit", function (e) {
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const phone = document.getElementById("phone").value.trim();
@@ -178,33 +289,31 @@
         const confirmPassword = document.getElementById("confirmPassword").value;
 
         if (!name || !email || !phone || !password || !confirmPassword) {
+            e.preventDefault();
             alert("Please fill all fields");
             return;
         }
 
         if (phone.length < 10) {
-            alert("Enter valid phone number");
+            e.preventDefault();
+            alert("Enter a valid phone number");
             return;
         }
 
         if (password.length < 6) {
+            e.preventDefault();
             alert("Password must be at least 6 characters");
             return;
         }
 
         if (password !== confirmPassword) {
+            e.preventDefault();
             alert("Passwords do not match");
             return;
         }
 
-        btn.classList.add("loading");
-        btn.innerHTML = "Creating Account...";
-
-        setTimeout(() => {
-            form.submit();
-        }, 500);
+        signupBtn.disabled = true;
+        signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account';
     });
 </script>
-
-</body>
-</html>
+{% endblock %}
