@@ -86,11 +86,14 @@ def submit_exam(request):
         result = "Not Suitable"
 
     candidate_data = request.session.get('candidate')
-    Candidate.objects.filter(email=candidate_data.get('email')).update(
-        name=candidate_data.get('name'),
-        phone=candidate_data.get('phone'),
-        mcq_score=score,
-        result=result,
+    candidate = Candidate.objects.update_or_create(
+        email=candidate_data.get('email'),
+        defaults={
+            'name': candidate_data.get('name'),
+            'phone': candidate_data.get('phone'),
+            'mcq_score': score,
+            'result': result,
+        }
     )
 
     return render(request, 'exam_submit.html', {
@@ -123,3 +126,9 @@ def signup_view(request):
         return redirect('login')
 
     return render(request, 'signup.html')
+
+def result_view(request):
+    results = Candidate.objects.all().order_by('-created_at')
+    return render(request, 'result.html', {
+        'results': results
+    })
