@@ -115,30 +115,6 @@
             word-break: break-word;
         }
 
-        /* instruction / warm message (optional but adds style) */
-        .exam-notice {
-            background: #eef3fc;
-            border-radius: 20px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            border-left: 4px solid #007bff;
-        }
-
-        .exam-notice span.emoji-badge {
-            font-size: 1.8rem;
-        }
-
-        .exam-notice p {
-            font-size: 0.9rem;
-            color: #1e4663;
-            font-weight: 500;
-            margin: 0;
-        }
-
         /* start test area */
         .action-area {
             text-align: center;
@@ -218,6 +194,32 @@
         .dummy-badge {
             display: none;
         }
+        .instructions-card {
+            background: #fff8e6;
+            border-left: 5px solid #ffc107;
+            border-radius: 20px;
+            padding: 1.3rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .instructions-card h3 {
+            margin-bottom: 0.8rem;
+            color: #8a6d00;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .instructions-card ul {
+            padding-left: 1.2rem;
+        }
+
+        .instructions-card li {
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            color: #5c4a00;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -242,9 +244,14 @@
             </div>
         </div>
 
-        <div class="exam-notice">
-            <span class="emoji-badge">📋</span>
-            <p>✓ Total duration: 20 minutes &nbsp;|&nbsp; ✓ MCQ format &nbsp;|&nbsp; ✓ Single attempt only</p>
+        <div class="instructions-card">
+            <h3>📌 Important Instructions</h3>
+            <ul>
+                <li>⏱️ Exam duration: <b>5 minutes</b></li>
+                <li>📝 Total questions: <b>20</b></li>
+                <li>📊 Question type: <b>Multiple Choice Questions (MCQ)</b></li>
+                <li>🚫 Only <b>one attempt</b> is allowed</li>
+            </ul>
         </div>
 
         <div class="action-area">
@@ -257,7 +264,7 @@
         </div>
 
         <div class="footer-note">
-            <span>🔒 Protegk IT | All rights reserved • Assessment integrity protected</span>
+            <span><a href="https://protegk.com" target="_blank"> Protegk IT | All rights reserved • Assessment integrity protected</a></span>
         </div>
     </div>
 </div>

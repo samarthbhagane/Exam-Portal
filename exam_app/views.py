@@ -91,7 +91,7 @@ def submit_exam(request):
         result=result,
     )
 
-    return render(request, 'result.html', {
+    return render(request, 'exam_submit.html', {
         'candidate': candidate_data,
         'score': score,
         'result': result

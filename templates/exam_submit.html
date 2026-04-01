@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Protegk IT | Exam Submitted</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e6f0fa 0%, #d4e2f2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0,123,255,0.1) 0%, rgba(0,123,255,0) 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatSlow 20s infinite alternate;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(44,156,124,0.08) 0%, rgba(44,156,124,0) 70%);
+            bottom: -250px;
+            right: -200px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatSlow2 25s infinite alternate;
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(70px, 50px) scale(1.1); }
+        }
+
+        @keyframes floatSlow2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-60px, -70px) scale(1.2); }
+        }
+
+        /* Main success card */
+        .success-card {
+            max-width: 550px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 10;
+            animation: slideUpFade 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 35px 65px -20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Header with gradient */
+        .success-header {
+            background: linear-gradient(135deg, #0f4c5c, #1e6f5c, #2c9c7c);
+            padding: 2.5rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-header::before {
+            content: '✓✓';
+            position: absolute;
+            font-size: 200px;
+            font-weight: bold;
+            opacity: 0.06;
+            right: -30px;
+            bottom: -40px;
+            font-family: monospace;
+            pointer-events: none;
+        }
+
+        .success-header::after {
+            content: '✨';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.08;
+            left: -20px;
+            top: -20px;
+            pointer-events: none;
+        }
+
+        .checkmark-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            margin-bottom: 1.2rem;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) 0.2s both;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.2); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .checkmark-wrapper i {
+            font-size: 3.8rem;
+            color: white;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        }
+
+        .success-header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .success-header p {
+            color: rgba(255,255,255,0.92);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Content area - clean and simple */
+        .content-body {
+            padding: 2.5rem 2rem 2rem;
+        }
+
+        /* Main message */
+        .message-container {
+            margin-bottom: 2rem;
+        }
+
+        .main-message {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .thankyou-text {
+            color: #1e6f5c;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.8rem;
+        }
+
+        /* Decorative element */
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2c9c7c, #5cb85c);
+            margin: 1.2rem auto;
+            border-radius: 3px;
+        }
+
+        /* Info note - minimal */
+        .info-note {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e2edf7;
+            font-size: 0.85rem;
+            color: #4a627a;
+            display: inline-block;
+            width: auto;
+        }
+
+        .info-note i {
+            color: #2c9c7c;
+            margin-right: 6px;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #1e6f5c, #2c9c7c);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30,111,92,0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(95deg, #155a4b, #23856a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30,111,92,0.35);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #d0dae8;
+            color: #2c5a6e;
+        }
+
+        .btn-outline:hover {
+            border-color: #2c9c7c;
+            background: #f9fffc;
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer-note {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eef2f8;
+            font-size: 0.7rem;
+            color: #8a9bb0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Confetti canvas style */
+        .confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @media (max-width: 500px) {
+            .success-header h1 {
+                font-size: 1.5rem;
+            }
+            .content-body {
+                padding: 1.8rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            .checkmark-wrapper {
+                width: 75px;
+                height: 75px;
+            }
+            .checkmark-wrapper i {
+                font-size: 2.8rem;
+            }
+        }
+
+        /* Subtle pulse animation for message */
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+
+        .thankyou-text {
+            animation: gentlePulse 2s ease-in-out infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="success-card">
+    <div class="success-header">
+        <div class="checkmark-wrapper">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>Exam Submitted Successfully!</h1>
+        <p>Your responses have been recorded</p>
+    </div>
+
+    <div class="content-body">
+        <div class="message-container">
+            <div class="main-message">
+                <i class="fas fa-envelope-open-text" style="color: #2c9c7c; margin-right: 8px;"></i>
+                Thank you for completing the Protegk IT assessment.
+            </div>
+            <div class="thankyou-text">
+                ✨ Your submission is confirmed ✨
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="homeBtn">
+                <i class="fas fa-home"></i> Return to Portal
+            </button>
+        </div>
+
+        <div class="footer-note">
+            <i class="fas fa-shield-alt"></i> Protegk IT Secure Assessment Platform
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Simple confetti effect for celebration
+        function launchConfetti() {
+            const canvas = document.createElement('canvas');
+            canvas.classList.add('confetti-canvas');
+            document.body.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            let particles = [];
+            const colors = ['#2c9c7c', '#1e6f5c', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#10b981'];
+            const particleCount = 120;
+            
+            for(let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 7 + 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 5 + 2,
+                    speedX: (Math.random() - 0.5) * 1.5,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 10
+                });
+            }
+            
+            let animationId;
+            let startTime = performance.now();
+            const duration = 2800;
+            
+            function drawConfetti(now) {
+                const elapsed = now - startTime;
+                if(elapsed >= duration) {
+                    cancelAnimationFrame(animationId);
+                    if(canvas && canvas.parentNode) canvas.remove();
+                    return;
+                }
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let allFinished = true;
+                
+                for(let p of particles) {
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                    
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotSpeed;
+                    
+                    if(p.y < canvas.height + 100) allFinished = false;
+                    if(p.y > canvas.height + 150) {
+                        p.y = -30;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    if(p.x > canvas.width + 50) p.x = -50;
+                    if(p.x < -50) p.x = canvas.width + 50;
+                }
+                
+                animationId = requestAnimationFrame(drawConfetti);
+            }
+            
+            animationId = requestAnimationFrame(drawConfetti);
+            
+            setTimeout(() => {
+                if(animationId) cancelAnimationFrame(animationId);
+                if(canvas && canvas.parentNode) canvas.remove();
+            }, duration + 200);
+        }
+        
+        // Trigger confetti after a short delay for smooth entrance
+        setTimeout(() => {
+            launchConfetti();
+        }, 300);
+        
+        // Return to portal button - redirect to login/home page
+        const homeBtn = document.getElementById('homeBtn');
+        if(homeBtn) {
+            homeBtn.addEventListener('click', function(e) {
+                // Add subtle click effect
+                this.style.transform = 'scale(0.97)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Show a quick confirmation before redirect (optional)
+                const btnText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Redirecting...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    // Redirect to main login/candidate portal page
+                    window.location.href = "/";
+                }, 600);
+            });
+        }
+        
+        // Optional: Clear exam-related session storage to prevent accidental resubmission
+        try {
+            // Clear stored exam answers to maintain clean state
+            if(sessionStorage.getItem('protegk_answers')) {
+                sessionStorage.removeItem('protegk_answers');
+            }
+            if(sessionStorage.getItem('protegk_timer')) {
+                sessionStorage.removeItem('protegk_timer');
+            }
+            // Keep candidate info for reference but not required
+        } catch(e) {}
+        
+        // Add floating animation to the card on load
+        const card = document.querySelector('.success-card');
+        if(card) {
+            card.style.animation = 'slideUpFade 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+        }
+        
+        // Add a small bounce to the checkmark on load
+        const checkmark = document.querySelector('.checkmark-wrapper');
+        if(checkmark) {
+            checkmark.style.animation = 'popIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) 0.1s both';
+        }
+        
+        // Prevent accidental page refresh warning removal (clean state)
+        window.onbeforeunload = null;
+        
+        // Optional: Display a small console log for tracking
+        console.log('✅ Protegk IT Exam - Successfully submitted at ' + new Date().toLocaleString());
+    })();
+</script>
+</body>
+</html>

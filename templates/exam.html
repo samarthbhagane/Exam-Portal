@@ -186,13 +186,17 @@
             font-size: 0.85rem;
             color: #0056b3;
         }
+        @keyframes fadeIn {
+            from { opacity:0; transform:scale(0.9); }
+            to { opacity:1; transform:scale(1); }
+        }
     </style>
 </head>
 <body>
 <div id="timer" data-duration="300">05:00</div>
 
 <div class="container">
-    <h2>⚡ Protegk IT Solution - Aptitude Test</h2>
+    <h2>Protegk IT Solution - Aptitude Test</h2>
     <div style="text-align: center; margin-bottom: 5px;">
         <span class="greeting-badge">📋 Online Assessment · Strict Timing</span>
     </div>
@@ -235,75 +239,102 @@
         </div>
     </form>
 </div>
+<div id="timeUpModal" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+">
+    <div style="
+        background: white;
+        padding: 30px 40px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        animation: fadeIn 0.3s ease;
+    ">
+        <h2 style="color:#dc3545;">⏰ Time Up!</h2>
+        <p>Your exam is being submitted automatically.</p>
+        <button onclick="submitExam()" style="
+            margin-top:15px;
+            padding:10px 20px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:30px;
+            cursor:pointer;
+        ">OK</button>
+    </div>
+</div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const timerElement = document.getElementById("timer");
-        const examForm = document.querySelector("form");
+document.addEventListener("DOMContentLoaded", function () {
 
-        if (!timerElement || !examForm) {
-            return;
+    let timeLeft = sessionStorage.getItem("timeLeft")
+        ? parseInt(sessionStorage.getItem("timeLeft"))
+        : 5 * 60;
+
+    const timer = document.getElementById("timer");
+    const form = document.querySelector("form");
+    const modal = document.getElementById("timeUpModal");
+
+    function updateTimer() {
+
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        timer.innerHTML =
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0');
+
+        sessionStorage.setItem("timeLeft", timeLeft);
+
+        if (timeLeft <= 120) {
+            timer.style.background = "#b02a37";
         }
 
-        let time = Number(timerElement.getAttribute("data-duration") || 300);
-        let examSubmitted = false;
-        let timerInterval = null;
+        if (timeLeft <= 0) {
+            modal.style.display = "flex";   // 👈 SHOW POPUP
+            clearInterval(interval);
 
-        function renderTime() {
-            const minutes = Math.floor(time / 60);
-            const seconds = time % 60;
-            timerElement.innerText =
-                String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+            // auto submit after 3 sec
+            setTimeout(() => {
+                form.submit();
+            }, 3000);
         }
 
-        function submitExam() {
-            if (examSubmitted) {
-                return;
-            }
+        timeLeft--;
+    }
 
-            examSubmitted = true;
-            window.onbeforeunload = null;
-            examForm.submit();
-        }
+    const interval = setInterval(updateTimer, 1000);
 
-        function startTimer() {
-            renderTime();
+    // Prevent refresh
+    window.onbeforeunload = function () {
+        return "Exam is in progress!";
+    };
 
-            timerInterval = setInterval(function () {
-                time -= 1;
-
-                if (time <= 0) {
-                    clearInterval(timerInterval);
-                    timerElement.innerText = "00:00";
-                    alert("Time is up. Your test will be submitted automatically.");
-                    submitExam();
-                    return;
-                }
-
-                renderTime();
-            }, 1000);
-        }
-
-        examForm.addEventListener("submit", function () {
-            examSubmitted = true;
-            window.onbeforeunload = null;
-
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-        });
-
-        window.onbeforeunload = function () {
-            if (!examSubmitted) {
-                return "Exam is in progress!";
-            }
-        };
-
-        renderTime();
-        setTimeout(function () {
-            alert("You have 5 minutes to complete the test. Click OK to start.");
-            startTimer();
-        }, 100);
+    // Disable right click
+    document.addEventListener("contextmenu", function(e) {
+        e.preventDefault();
     });
+
+    // Highlight answered
+    document.querySelectorAll(".question").forEach((q) => {
+        q.querySelectorAll("input[type=radio]").forEach((radio) => {
+            radio.addEventListener("change", () => {
+                q.style.background = "#e6f4ff";
+                q.style.borderLeft = "4px solid #007bff";
+            });
+        });
+    });
+
+});
+    
+function submitExam() {
+    document.querySelector("form").submit();
+}
 </script>
-</body>
 </html>
