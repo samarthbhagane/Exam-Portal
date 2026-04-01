@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q 
+from django.views.decorators.cache import never_cache
 from .models import Question, Candidate
+from django.contrib.auth.hashers import make_password, check_password
+
 
 # 🔐 Custom Login
 def login_view(request):
@@ -9,7 +12,12 @@ def login_view(request):
         password = request.POST.get("password")
 
         try:
-            candidate = Candidate.objects.get(email=email, password=password)
+            candidate = Candidate.objects.get(email=email)
+
+            if not check_password(password, candidate.password):
+                return render(request, 'login.html', {
+                    "error": "Invalid email or password"
+                })
 
             request.session['candidate'] = {
                 'id': candidate.id,
@@ -32,6 +40,7 @@ def login_view(request):
 
 
 # Dashboard
+@never_cache
 def dashboard(request):
     if not request.session.get('candidate'):
         return redirect('login')
@@ -44,6 +53,7 @@ def dashboard(request):
 
 
 # Start Exam
+@never_cache
 def start_exam(request):
     if not request.session.get('candidate'):
         return redirect('login')
@@ -55,6 +65,7 @@ def start_exam(request):
 
 
 # Exam Page
+@never_cache
 def exam_view(request):
     if not request.session.get('exam_started'):
         return redirect('dashboard')
@@ -69,6 +80,7 @@ def exam_view(request):
 
 
 # Submit
+@never_cache
 def submit_exam(request):
     if not request.session.get('candidate'):
         return redirect('login')
@@ -106,11 +118,14 @@ def submit_exam(request):
         }
     )
 
-    return render(request, 'exam_submit.html', {
+    response = render(request, 'exam_submit.html', {
         'candidate': candidate_data,
         'score': score,
         'result': result
     })
+
+    request.session.flush()
+    return response
 
 def signup_view(request):
     if request.method == "POST":
@@ -124,7 +139,7 @@ def signup_view(request):
             defaults={
                 'name': name,
                 'phone': phone,
-                'password': password,
+                'password': make_password(password),
             }
         )
 

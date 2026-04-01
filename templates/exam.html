@@ -111,6 +111,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const timer = document.getElementById("timer");
     const form = document.getElementById("examForm");
     const modal = document.getElementById("timeUpModal");
+    let isSubmitting = false;
+
+    function allowSubmitNavigation() {
+        isSubmitting = true;
+        window.onbeforeunload = null;
+    }
 
     function updateTimer() {
         let minutes = Math.floor(timeLeft / 60);
@@ -123,14 +129,23 @@ document.addEventListener("DOMContentLoaded", function () {
         if (timeLeft <= 0) {
             modal.style.display = "flex";
             clearInterval(interval);
-            setTimeout(() => { form.submit(); }, 3000);
+            setTimeout(() => {
+                allowSubmitNavigation();
+                form.submit();
+            }, 3000);
         }
         timeLeft--;
     }
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
-    window.onbeforeunload = function () { return "Exam is in progress!"; };
+    form.addEventListener("submit", allowSubmitNavigation);
+    window.onbeforeunload = function () {
+        if (isSubmitting) {
+            return;
+        }
+        return "Exam is in progress!";
+    };
     document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
     document.querySelectorAll(".question").forEach((question) => {
         question.querySelectorAll("input[type=radio]").forEach((radio) => {
@@ -143,7 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function submitExam() {
+    window.onbeforeunload = null;
     document.getElementById("examForm").submit();
+    window.location.href = "{% url 'submit' %}";
 }
 </script>
 {% endblock %}

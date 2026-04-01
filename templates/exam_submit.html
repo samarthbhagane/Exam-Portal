@@ -30,12 +30,17 @@
 <script>
     (function () {
         const homeBtn = document.getElementById("homeBtn");
+
+        function leaveCompletedExamFlow() {
+            window.location.replace("/");
+        }
+
         if (homeBtn) {
             homeBtn.addEventListener("click", function () {
                 this.disabled = true;
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting';
                 setTimeout(() => {
-                    window.location.href = "/";
+                    leaveCompletedExamFlow();
                 }, 500);
             });
         }
@@ -47,6 +52,10 @@
         } catch (e) {}
 
         window.onbeforeunload = null;
+        history.pushState(null, "", window.location.href);
+        window.addEventListener("popstate", function () {
+            leaveCompletedExamFlow();
+        });
     })();
 </script>
 {% endblock %}
